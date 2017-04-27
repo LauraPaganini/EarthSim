@@ -1,34 +1,48 @@
 
 public class Demo {
+	private static boolean simThread = false, presThread = false, simInit = false, presInit = false;
+	private static int bufferLen = 1;
+	private static Earth e;
+	private static Buffer b;
 
-	static boolean simInitiative = false;
-	static boolean presInitiative = false;
-	
-	
 	public static void main(String[] args) {
-		Earth e = new Earth(18, 1);
-		
-		if(simInitiative){
-			
-			
-			
-		}
-		Cell[][] g;
-		for(int i = 0; i < 5; i++){
-			g = e.updateSim(20);
-			
-			for(int j = 0; j< g.length; j ++){
-				for(int l = 0; l < g[0].length; l++)
-					System.out.printf("%2.0f ", g[j][l].getTemp());
-
-				System.out.println();
+		for (int i = 0; i < args.length; i++) {
+			switch (args[i]) {
+			case "-t":
+				simInit = true;
+				break;
+			case "-r":
+				presInit = true;
+				break;
+			case "-s":
+				simThread = true;
+				break;
+			case "-p":
+				presThread = true;
+				break;
+			case "-b":
+				b = new Buffer(Integer.parseInt(args[++i]));
+				break;
 			}
-			System.out.println("\n");
+		}
+
+		e = new Earth(); // how to get size/time from cmd line?
+		runSim();
+	}
+
+	private static void runSim() {
+
+		if (simInit) {
+			e.simInit(b);
+		}else if(presInit){
+			//pres signals sim
+		}else{
+			for(int i = 0; i < b.buffer.length; i++)
+				b.buffer[i] = e.updateSim();
+			//signal pres
 		}
 		
-		
+
 	}
-	
-	
 
 }
