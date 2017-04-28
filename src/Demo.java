@@ -27,6 +27,7 @@ public class Demo {
 		}
 
 		e = new Earth(); // how to get size/time from cmd line?
+		b = new Buffer();
 		runSim();
 	}
 
@@ -37,8 +38,8 @@ public class Demo {
 		}else if(presInit){
 			//pres signals sim
 		}else{
-			for(int i = 0; i < b.buffer.length; i++)
-				b.buffer[i] = e.updateSim();
+			for(int i = 0; i < b.getLength(); i++)
+				b.add(e.updateSim());
 			//signal pres
 		}
 		

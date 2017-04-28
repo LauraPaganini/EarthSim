@@ -73,11 +73,26 @@ public class Earth {
 		sunLon += 360 * (timeInterval / 1440.0);
 		return newGlobe;
 	}
-	
-	public void simInit(Buffer b){
-		for(int i = 0; i < b.buffer.length; i++)
-			b.buffer[i] = this.updateSim();
-		//signal pres
-		
+
+	public void simInit(Buffer b) {
+		for(int i = 0; i < b.getLength(); i++)
+			b.add(this.updateSim());
+		// signal pres
+
+	}
+
+	public double[] minMaxTemp() {
+		double[] minMax = { Integer.MAX_VALUE, 0 };
+
+		for (int i = 0; i < d; i++) {
+			for (int j = 0; j < d; j++) {
+				if (newGlobe[i][j].getTemp() < minMax[0])
+					minMax[0] = newGlobe[i][j].getTemp();
+				if (newGlobe[i][j].getTemp() > minMax[1])
+					minMax[1] = newGlobe[i][j].getTemp();
+			}
+		}
+
+		return minMax;
 	}
 }
