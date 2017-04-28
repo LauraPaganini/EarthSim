@@ -3,20 +3,34 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class Presentation {
 
 	private JTable tempGrid;
+	private JPanel gridPanel;
 
 	public Presentation(int gridSpacing, Buffer buffer, GUI gui) {
 
 		tempGrid = new JTable(180 / gridSpacing, 180 / gridSpacing);
-		tempGrid.setPreferredSize(new Dimension(830, 430));
-		tempGrid.add(new JLabel("HELLO"));
+		tempGrid.setPreferredSize(new Dimension(600, 430));
+		tempGrid.setBackground(new Color(255, 255, 255, 10));
 		tempGrid.setVisible(true);
-		tempGrid.setBackground(Color.ORANGE);
+		
+		gridPanel = new JPanel();
+		gridPanel.setBorder(new LineBorder(Color.WHITE, 1, true));
+		//gridPanel.setBackground(new Color(0, 0, 0, 0));
+		gridPanel.setPreferredSize(new Dimension(600, 430));
+		gridPanel.setSize(new Dimension(600, 500));
+		gridPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+		//contentPane.add(mapPanel);
+		
+		gridPanel.add(tempGrid);
+		
+		
 		
 		//tempGrid.setDefaultRenderer(Object.class, new TempCellRenderer());
 		
@@ -37,6 +51,10 @@ public class Presentation {
 
 	public JTable getTable() {
 		return tempGrid;
+	}
+	
+	public JPanel getPanel() {
+		return gridPanel;
 	}
 
 	// custom cell renderer for temperature grid

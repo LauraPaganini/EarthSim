@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLayeredPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.GroupLayout;
@@ -40,6 +41,7 @@ public class GUI extends JFrame {
 	private JTextField gridSpacingNum, timeNum, displayRate;
 	private JButton runButton, stopButton, resetButton, pauseButton;
 	private ImageIcon map;
+	private JLayeredPane mainPresPanel;
 
 	private static Buffer buffer;
 	private static Earth earth;
@@ -79,12 +81,20 @@ public class GUI extends JFrame {
 		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		mapPanel = new JPanel();
-		mapPanel.setBorder(new LineBorder(Color.WHITE, 1, true));
 		mapPanel.setBackground(new Color(0, 0, 102));
-		mapPanel.setPreferredSize(new Dimension(830, 430));
+		mapPanel.setPreferredSize(new Dimension(830, 410));
 		mapPanel.setSize(new Dimension(800, 500));
 		mapPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-		contentPane.add(mapPanel);
+		//contentPane.add(mapPanel);
+		
+		mainPresPanel = new JLayeredPane();
+		mainPresPanel.setBackground(new Color(0, 0, 102));
+		mainPresPanel.setPreferredSize(new Dimension(830, 430));
+		mainPresPanel.setSize(new Dimension(800, 500));
+		mainPresPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+		contentPane.add(mainPresPanel);
+		
+		mainPresPanel.add(mapPanel, new Integer(1));
 
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBorder(null);
@@ -116,6 +126,7 @@ public class GUI extends JFrame {
 		lblGridSpacing.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblGridSpacing.setForeground(Color.WHITE);
 
+		
 		gridSpacingNum = new JTextField("15");
 		runButton = new JButton("Start");
 		runButton.addActionListener(new ActionListener(){
@@ -189,22 +200,23 @@ public class GUI extends JFrame {
 						GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)));
 		settingsPanel.setLayout(gl_settingsPanel);
 
+		
+		
 		// Adding image to map panel
-//		map = new ImageIcon("Equirectangular_projection_SW.jpg");
-//		JLabel lbMap = new JLabel("",
-//				new ImageIcon("C:/Users/laura/workspace/EarthSim/Equirectangular_projection_SW.jpg"), JLabel.CENTER);
-//		mapPanel.add(lbMap, BorderLayout.CENTER);
+		map = new ImageIcon("Equirectangular_projection_SW.jpg");
+		JLabel lbMap = new JLabel("",
+				new ImageIcon("/Users/mollymcconaughey/Documents/workspace/EarthSim/Equirectangular_projection_SW.jpg"), JLabel.CENTER);
+		mapPanel.add(lbMap, BorderLayout.CENTER);
 
-	}
+	} //end constructor
 
 	private void runButtonActionPerformed(final java.awt.event.ActionEvent evt) {
 		// start thread for presentation
 
 		Presentation p = new Presentation(Integer.parseInt(gridSpacingNum.getText()), buffer, this);
-		mapPanel.add(p.getTable());
-		repaint();
-		System.out.println("PRES");
-		// sim needs to run and fill buffer
+		mainPresPanel.add(p.getPanel(), new Integer(2));
+		mapPanel.revalidate();
+		//sim needs to run and fill buffer
 
 //		while (!buffer.isEmpty()) {
 //			Cell[][] globe = buffer.remove();
