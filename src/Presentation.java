@@ -4,6 +4,7 @@ import java.awt.Dimension;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class Presentation {
@@ -13,26 +14,12 @@ public class Presentation {
 	public Presentation(int gridSpacing, Buffer buffer, GUI gui) {
 
 		tempGrid = new JTable(180 / gridSpacing, 180 / gridSpacing);
-		tempGrid.setPreferredSize(new Dimension(830, 430));
-		tempGrid.add(new JLabel("HELLO"));
-		tempGrid.setVisible(true);
-		tempGrid.setBackground(Color.ORANGE);
+		// tempGrid.setSize(new Dimension(830, 430));
+		// tempGrid.setFillsViewportHeight(true);
+		tempGrid.setEnabled(false);
 		
-		//tempGrid.setDefaultRenderer(Object.class, new TempCellRenderer());
-		
-//		while (!buffer.isEmpty()) {
-//			Cell[][] globe = buffer.remove();
-//
-//			for (int i = 0; i < globe.length; i++) {
-//				for (int j = 0; j < globe[0].length; j++) {
-//
-//					//TableCellRenderer tcr = tempGrid.getCellRenderer(i, j);
-//					
-//					
-//				}
-//			}
-//			gui.repaint();
-//		}
+		tempGrid.setDefaultRenderer(Object.class, new TempCellRenderer(buffer.remove()));
+	
 	}
 
 	public JTable getTable() {
@@ -42,41 +29,64 @@ public class Presentation {
 	// custom cell renderer for temperature grid
 
 	public class TempCellRenderer extends DefaultTableCellRenderer {
+		private Cell[][] globe;
 
-		public Component getTableCellRendererComponent(JTable table, Cell[][] globe, Object value, boolean isSelected,
-				boolean hasFocus, int row, int col) {
+		public TempCellRenderer(Cell[][] g) {
+			super();
+			globe = g;
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int col) {
 
 			// Cells are by default rendered as a JLabel
-			JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-			l.setText("BBBB");
-//			double[] tempRange = earth.minMaxTemp();
-//			// color = temp % ((max-min)/3)
-		//	int colorInt = (int) (globe[row][col].getTemp() % ((tempRange[1] - tempRange[0]) / 4));
+			JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+			
+			double[] tempRange = minMaxTemp(globe);
+			// color = temp % ((max-min)/4)
+			int colorInt = (int) (globe[row][col].getTemp() % ((tempRange[1] - tempRange[0]) / 4));
 			Color color;
-			//switch (colorInt) {
-//			case 0: // blue
-//				color = new Color(0, 0, 255, 50);
-//				break;
-//			case 1: // green
-//				color = new Color(0, 255, 0, 50);
-//				break;
-//			case 2: // yellow
-//				color = new Color(255, 255, 0, 50);
-//				break;
-//			case 3: // orange
-//				color = new Color(255, 100, 0, 50);
-//				break;
-//			case 4: // red
-//				color = new Color(255, 0, 0, 50);
-//				break;
-			//default:
-				color = Color.BLACK;
-		//	}
+			switch (colorInt) {
+				case 0: // blue
+					color = new Color(0, 0, 255, 50);
+					break;
+				case 1: // green
+					color = new Color(0, 255, 0, 50);
+					break;
+				case 2: // yellow
+					color = new Color(255, 255, 0, 50);
+					break;
+				case 3: // orange
+					color = new Color(255, 100, 0, 50);
+					break;
+				case 4: // red
+					color = new Color(255, 0, 0, 50);
+					break;
+				default:
+					color = Color.BLACK;
+			}
 
-			setBackground(color);
+			l.setBackground(color);
 			// Return the JLabel that renders the cell
 			return l;
 
 		}
+
+		public double[] minMaxTemp(Cell[][] globe) {
+			double[] minMax = { Integer.MAX_VALUE, 0 };
+
+			for (int i = 0; i < globe.length; i++) {
+				for (int j = 0; j < globe[0].length; j++) {
+					if (globe[i][j].getTemp() < minMax[0])
+						minMax[0] = globe[i][j].getTemp();
+					if (globe[i][j].getTemp() > minMax[1])
+						minMax[1] = globe[i][j].getTemp();
+				}
+			}
+
+			return minMax;
+		}
 	}
+
 }

@@ -75,24 +75,11 @@ public class Earth {
 	}
 
 	public void simInit(Buffer b) {
-		for(int i = 0; i < b.getLength(); i++)
-			b.add(this.updateSim());
+		for(int i = 0; i <= b.getLength(); i++)
+			b.add(updateSim());
 		// signal pres
 
 	}
 
-	public double[] minMaxTemp() {
-		double[] minMax = { Integer.MAX_VALUE, 0 };
-
-		for (int i = 0; i < d; i++) {
-			for (int j = 0; j < d; j++) {
-				if (newGlobe[i][j].getTemp() < minMax[0])
-					minMax[0] = newGlobe[i][j].getTemp();
-				if (newGlobe[i][j].getTemp() > minMax[1])
-					minMax[1] = newGlobe[i][j].getTemp();
-			}
-		}
-
-		return minMax;
-	}
+	
 }

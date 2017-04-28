@@ -4,14 +4,11 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.FlowLayout;
 
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -41,8 +38,8 @@ public class GUI extends JFrame {
 	private JButton runButton, stopButton, resetButton, pauseButton;
 	private ImageIcon map;
 
-	private static Buffer buffer;
-	private static Earth earth;
+	private Buffer buffer;
+	private Earth earth;
 	private boolean done = false;
 
 	/**
@@ -52,9 +49,8 @@ public class GUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					earth = new Earth();
-					buffer = new Buffer(1);
-					GUI frame = new GUI(buffer, earth);
+					
+					GUI frame = new GUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -66,9 +62,9 @@ public class GUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GUI(Buffer b, Earth e) {
-		this.buffer = b;
-		this.earth = e;
+	public GUI() {
+//		this.buffer = b;
+//		this.earth = e;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 700);
@@ -84,6 +80,7 @@ public class GUI extends JFrame {
 		mapPanel.setPreferredSize(new Dimension(830, 430));
 		mapPanel.setSize(new Dimension(800, 500));
 		mapPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+		mapPanel.setLayout(new BorderLayout());
 		contentPane.add(mapPanel);
 
 		JPanel titlePanel = new JPanel();
@@ -200,30 +197,16 @@ public class GUI extends JFrame {
 	private void runButtonActionPerformed(final java.awt.event.ActionEvent evt) {
 		// start thread for presentation
 
+		earth = new Earth(15,700);
+		buffer = new Buffer();
+		
+		earth.simInit(buffer);
 		Presentation p = new Presentation(Integer.parseInt(gridSpacingNum.getText()), buffer, this);
 		mapPanel.add(p.getTable());
-		repaint();
-		System.out.println("PRES");
+		mapPanel.revalidate();
+
 		// sim needs to run and fill buffer
 
-//		while (!buffer.isEmpty()) {
-//			Cell[][] globe = buffer.remove();
-//
-//			for (int i = 0; i < globe.length; i++) {
-//				for (int j = 0; j < globe[0].length; j++) {
-//
-//					//tempGrid.setDefaultRenderer(Object.class, new TempCellRenderer());
-//					//TableCellRenderer tcr = tempGrid.getCellRenderer(i, j);
-//					
-//				}
-//			}
-//
-//			repaint();
-//		}
-
-		// TableCellRenderer tcr = tempGrid.getCellRenderer(row, column)
-		// add to panel
-		// repaint
 	}
 
 	private void stopButtonActionPerformed(final java.awt.event.ActionEvent evt) {
