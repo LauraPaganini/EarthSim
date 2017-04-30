@@ -73,7 +73,7 @@ public class EarthHeatGUI extends JFrame implements IEarthHeatGUIModel {
 	}
 	
 	public EarthHeatGUI CreateAndShowForm(){
-		EarthHeatGUI window = new EarthHeatGUI();
+		final EarthHeatGUI window = new EarthHeatGUI();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
