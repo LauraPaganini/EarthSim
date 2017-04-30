@@ -51,7 +51,6 @@ public class GUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
 					GUI frame = new GUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -65,9 +64,6 @@ public class GUI extends JFrame {
 	 * Create the frame.
 	 */
 	public GUI() {
-//		this.buffer = b;
-//		this.earth = e;
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 700);
 		contentPane = new JPanel();
@@ -77,17 +73,19 @@ public class GUI extends JFrame {
 		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		mapPanel = new JPanel();
-		mapPanel.setBackground(new Color(0, 0, 102));
+		//mapPanel.setBackground(new Color(0, 0, 102));
+		mapPanel.setOpaque(false);
 		mapPanel.setPreferredSize(new Dimension(830, 410));
 		mapPanel.setSize(new Dimension(800, 500));
 		mapPanel.setAlignmentY(Component.TOP_ALIGNMENT);
 		//contentPane.add(mapPanel);
 		
 		mainPresPanel = new JLayeredPane();
-		mainPresPanel.setBackground(new Color(0, 0, 102));
+		//mainPresPanel.setBackground(new Color(0, 0, 102));
 		mainPresPanel.setPreferredSize(new Dimension(830, 430));
 		mainPresPanel.setSize(new Dimension(800, 500));
 		mainPresPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+		mainPresPanel.setOpaque(false);
 		contentPane.add(mainPresPanel);
 		
 		mainPresPanel.add(mapPanel, new Integer(1));
@@ -202,7 +200,7 @@ public class GUI extends JFrame {
 		// Adding image to map panel
 		map = new ImageIcon("Equirectangular_projection_SW.jpg");
 		JLabel lbMap = new JLabel("",
-				new ImageIcon("/Users/mollymcconaughey/Documents/workspace/EarthSim/Equirectangular_projection_SW.jpg"), JLabel.CENTER);
+				new ImageIcon("/Users/laura/workspace/EarthSim/Equirectangular_projection_SW.jpg"), JLabel.CENTER);
 		mapPanel.add(lbMap, BorderLayout.CENTER);
 
 	} //end constructor
@@ -210,7 +208,7 @@ public class GUI extends JFrame {
 	private void runButtonActionPerformed(final java.awt.event.ActionEvent evt) {
 		// start thread for presentation
 
-		earth = new Earth(15,700);
+		earth = new Earth(7,700);
 		buffer = new Buffer();
 		
 		earth.simInit(buffer);

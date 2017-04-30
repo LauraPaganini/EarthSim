@@ -18,32 +18,31 @@ public class Presentation {
 
 		tempGrid = new JTable(180 / gridSpacing, 180 / gridSpacing);
 		tempGrid.setPreferredSize(new Dimension(600, 430));
-		tempGrid.setBackground(new Color(255, 255, 255, 10));
+		tempGrid.setOpaque(false);
 		tempGrid.setVisible(true);
-		
+
 		gridPanel = new JPanel();
 		gridPanel.setBorder(new LineBorder(Color.WHITE, 1, true));
-		//gridPanel.setBackground(new Color(0, 0, 0, 0));
+		// gridPanel.setBackground(new Color(0, 0, 0, 0));
 		gridPanel.setPreferredSize(new Dimension(600, 430));
 		gridPanel.setSize(new Dimension(600, 500));
 		gridPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-		//contentPane.add(mapPanel);
-		
+		// contentPane.add(mapPanel);
+
 		gridPanel.add(tempGrid);
-		
-		
+
 		// tempGrid.setSize(new Dimension(830, 430));
 		// tempGrid.setFillsViewportHeight(true);
 		tempGrid.setEnabled(false);
-		
+
 		tempGrid.setDefaultRenderer(Object.class, new TempCellRenderer(buffer.remove()));
-	
+
 	}
 
 	public JTable getTable() {
 		return tempGrid;
 	}
-	
+
 	public JPanel getPanel() {
 		return gridPanel;
 	}
@@ -63,31 +62,24 @@ public class Presentation {
 				int row, int col) {
 
 			// Cells are by default rendered as a JLabel
-			JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-			
+			JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+			l.setText(String.format("%3.3f", globe[row][col].getTemp()));
 			double[] tempRange = minMaxTemp(globe);
 			// color = temp % ((max-min)/4)
-			int colorInt = (int) (globe[row][col].getTemp() % ((tempRange[1] - tempRange[0]) / 4));
+			double colorNum = globe[row][col].getTemp() - tempRange[0];
 			Color color;
-			switch (colorInt) {
-				case 0: // blue
-					color = new Color(0, 0, 255, 50);
-					break;
-				case 1: // green
-					color = new Color(0, 255, 0, 50);
-					break;
-				case 2: // yellow
-					color = new Color(255, 255, 0, 50);
-					break;
-				case 3: // orange
-					color = new Color(255, 100, 0, 50);
-					break;
-				case 4: // red
-					color = new Color(255, 0, 0, 50);
-					break;
-				default:
-					color = Color.BLACK;
-			}
+			if (colorNum < (tempRange[1] - tempRange[0]) * .2)// blue
+				color = new Color(0, 0, 255, 50);
+			else if (colorNum < (tempRange[1] - tempRange[0]) * .4)// green
+				color = new Color(0, 255, 0, 50);
+			else if (colorNum < (tempRange[1] - tempRange[0]) * .6)// yellow
+				color = new Color(255, 255, 0, 50);
+			else if (colorNum < (tempRange[1] - tempRange[0]) * .8)// orange
+				color = new Color(255, 100, 0, 50);
+			else if (colorNum <= (tempRange[1] - tempRange[0]))// red
+				color = new Color(255, 0, 0, 50);
+			else
+				color = Color.BLACK;
 
 			l.setBackground(color);
 			// Return the JLabel that renders the cell
